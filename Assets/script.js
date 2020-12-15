@@ -18,9 +18,14 @@ var h1 = document.querySelector('#h1')
 var pTag1 = document.querySelector('#pTag1')
 var pTag2 = document.querySelector('#pTag2')
 var buttonBin = document.querySelector('#button-bin')
+var feedback = document.querySelector('#answer-feedback')
 var wrongBtn = document.querySelector('#wrong')
 var correctBtn = document.querySelector('#correct')
 var footer = document.querySelector('#footer')
+
+
+//start game with 60 seconds on the clock
+var timeLeft = 59;
 
 
 
@@ -29,16 +34,14 @@ homePage()
 
 // HOME PAGE
 function homePage() {
-    // add nav button
-    nav.appendChild(btnElNav)
-    //set new nav button attribute
-    btnElNav.setAttribute('id', 'navBtnTxt')
+    // add nav button and set id attributes
+    nav.appendChild(btnElNav).setAttribute('id', 'navBtnTxt')
+    //ad onclick function for scoresPage 
+    btnElNav.setAttribute('onclick', 'scoresPage()')
     //set nav button attribute text
     navBtnTxt.textContent = "Score Card"
-    navBtnTxt.addEventListener('click', function () {
-        console.log('Scores Page')
-        scoresPage()
-    })
+    console.log('Home')
+
 
     //add text content of h1
     h1.textContent = 'Quiz Time';
@@ -59,29 +62,71 @@ function homePage() {
     footer.style.textAlign = 'center';
 }
 
-//Start countdown timer
+
+
+
+//Start countdown timer to start game
 function gameCountdown() {
+    btnElNav.removeAttribute('onclick', 'scoresPage()')
 
     //start countdown timer 3 seconds
-    var timeLeft = 3;
+    var timeTillStart = 3;
 
     var timeInterval = setInterval(function () {
-        startButtonText.textContent = '* ' + timeLeft + ' *';
-        timeLeft--;
+        //replace nav bar text with countdown time
+        navBtnTxt.textContent = '* ' + timeTillStart + ' *';
+        timeTillStart--;
+        h1.textContent = ''
+        pTag1.textContent = 'Get Ready'
+        buttonBin.innerHTML = ''
 
-        if (timeLeft === -1) {
-            //reset button bin
-            buttonBin.innerHTML = ''
-            question1();
+        //when coutdown finishes, clear content and start game
+        if (timeTillStart === -1) {
+            //nav bar text signal start
+            navBtnTxt.textContent = 'Start!'
+
+            // clear button bin
+            gameStart();
             clearInterval(timeInterval);
         }
 
     }, 1000);
-
-
-    //lauch game start
-
 }
+
+
+
+
+//Start countdown timer
+function gameStart() {
+    // launch question1 function
+    question1()
+    console.log('Game Started')
+
+    var timeInterval = setInterval(function () {
+
+        // add nav button and set id attributes
+        nav.appendChild(btnElNav).setAttribute('id', 'navBtnTxt')
+
+        //display countdown text
+        navBtnTxt.textContent = timeLeft + ' seconds left!';
+        //subtract 1 second
+        timeLeft--;
+
+        //when time is up, clear buttons and 
+        if (timeLeft < 0) {
+            //nav bar text alert
+            navBtnTxt.textContent = 'Times Up!'
+            //reset button-bin
+            buttonBin.innerHTML = ''
+            inputPlayerInfo();
+            clearInterval(timeInterval);
+        }
+
+    }, 1000);
+}
+
+
+
 
 
 // START GAME / question 1 layout of 'main content'
@@ -117,22 +162,59 @@ function question1() {
 }
 
 
-
-
 //onclick function for wrong answer
 function wrong() {
-    console.log('wrong')
+    //report wrong answer to user
+    feedback.textContent = 'try again';
+    //reduce game clock time for wrong answer clicks
+    timeLeft = timeLeft - 5
+    //set display time for wrong answer feedback
+    var feedbackTimer = 2;
+
+    var feedbackInterval = setInterval(function () {
+        feedbackTimer--;
+
+        if (feedbackTimer === 0) {
+            feedback.textContent = "";
+            clearInterval(feedbackInterval);
+        }
+
+    }, 1000);
 }
-//onclick function for correct answer
+
+
+//onclick function for correct answers
 function correct() {
-    console.log('correct')
+    //report correct anser to user
+    feedback.textContent = 'correct!';
+    //set display time for correct answer feedback
+    var feedbackTimer = 3;
+
+    var feedbackInterval = setInterval(function () {
+        feedbackTimer--;
+
+        if (feedbackTimer === 0) {
+            feedback.textContent = "";
+            clearInterval(feedbackInterval);
+        }
+
+    }, 1000);
 }
 
 
+
+function inputPlayerInfo() {
+    console.log('times up!')
+}
 
 
 // SCORE PAGE
 function scoresPage() {
+    //ad onclick function for scoresPage 
+    btnElNav.setAttribute('onclick', 'homePage()')
+    //set nav button attribute text
+    navBtnTxt.textContent = "Home"
+    console.log('Scores')
 
     //h1 text
     h1.textContent = 'Scores'
@@ -141,10 +223,4 @@ function scoresPage() {
     //clear button box
     buttonBin.innerHTML = ''
 
-    //set nav button attribute text
-    navBtnTxt.textContent = "Home"
-    navBtnTxt.addEventListener('click', function () {
-        console.log('Home Page')
-        homePage()
-    })
 }
