@@ -10,6 +10,8 @@ var btnEl1 = document.createElement('button');
 var btnEl2 = document.createElement('button');
 var btnEl3 = document.createElement('button');
 var btnEl4 = document.createElement('button');
+var textBox = document.createElement('input')
+var textInput = document.createElement('input')
 
 
 // variable to focue on id tags h1
@@ -25,7 +27,8 @@ var footer = document.querySelector('#footer')
 
 
 //start game with 60 seconds on the clock
-var timeLeft = 59;
+var timeLeft = 9;
+var userInitials = ''
 
 
 
@@ -204,8 +207,18 @@ function correct() {
 
 
 function inputPlayerInfo() {
-    console.log('times up!')
+    h1.textContent = ''
+    pTag1.textContent = ''
+    buttonBin.innerHTML = ''
+    userInitials = prompt('Save that score! \n enter initials')
+    console.log(userInitials)
+    scoresPage()
+    // buttonBin.appendChild(textBox).setAttribute('id', 'user-initials')
+    // buttonBin.appendChild(textInput).setAttribute('type', 'submit')
+    // textInput.setAttribute('onclick', 'recordUserInitials()')
+
 }
+
 
 
 // SCORE PAGE
