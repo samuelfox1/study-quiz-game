@@ -37,10 +37,9 @@ var userScoresArr = []
 var x = 0
 
 
-
-
-// LOAD HOME PAGE
 homePage()
+
+
 
 // HOME PAGE
 function homePage() {
@@ -73,12 +72,11 @@ function homePage() {
     //listen for button click
     btnElStart.addEventListener('click', function () {
         //start game countdown when clicked
-        console.log('start game')
         gameCountdown()
     })
     //homepage footer
-    // footer.textContent = 'Samuel Fox, December 2020';
-    // footer.style.textAlign = 'center';
+    footer.textContent = 'Samuel Fox, December 2020';
+    footer.style.textAlign = 'center';
 }
 
 
@@ -104,7 +102,6 @@ function gameCountdown() {
             //nav bar text signal start
             navBtnTxt.textContent = 'Start!'
             x = 0
-            console.log('x at game start =' + x)
             // clear button bin
             gameStart();
             //stop countdown timer
@@ -135,8 +132,8 @@ function gameStart() {
         if (timeLeft < 0 || gameOver === true) {
             //reset button-bin
             buttonBin.innerHTML = ''
-            inputPlayerInfo();
             clearInterval(timeInterval);
+            inputPlayerInfo();
         }
 
     }, 1000);
@@ -183,6 +180,7 @@ var buttonArr = [
 
 function question(x) {
 
+    //if there are still question objects left in the array, load the next question
     if (x < questionsArr.length) {
 
         //add title Question[x]
@@ -201,6 +199,7 @@ function question(x) {
     } else {
 
         gameOver = true
+
     }
 
     buttonBin.addEventListener('click', function (event) {
@@ -259,27 +258,20 @@ function correct() {
 }
 
 
+var inputName = ''
+var userScoresArr = []
 
 function inputPlayerInfo() {
+    loadLocalStorage()
 
     h1.textContent = ''
     pTag1.textContent = ''
     buttonBin.innerHTML = ''
-    userObj.name = prompt('Save that score! \n enter initials')
-    userObj.score = timeLeft
-    userScoresArr.push(userObj)
-    console.log(userScoresArr)
-    // console.log('score = ' + timeLeft)
+    inputName = prompt('Save that score! \n enter initials')
+    userScoresArr.push(`${inputName} - ${timeLeft}`)
+    //may need to be array name\/ \/ update line 315 as well
+    localStorage.setItem("userScoresArr", JSON.stringify(userScoresArr));
     scoresPage()
-
-    for (let i = 0; i < userScoresArr.length + 1; i++) {
-        console.log(userScoresArr.length)
-        list.appendChild(liEl0).textContent = `${userScoresArr[0].name} - ${userScoresArr[0].score} `
-
-
-    }
-
-
 }
 
 
@@ -288,7 +280,7 @@ function inputPlayerInfo() {
 function scoresPage() {
 
     //ad onclick function for scoresPage 
-    btnElNav.setAttribute('onclick', 'homePage()')
+    btnElNav.setAttribute('onclick', 'location.reload()')
     //set nav button attribute text
     navBtnTxt.textContent = "Home"
 
@@ -298,9 +290,44 @@ function scoresPage() {
     pTag1.textContent = ""
     //clear button box
     buttonBin.innerHTML = ''
-
+    buttonStart.innerHTML = ''
+    // loadScores()
+    // init()
+    loadLocalStorage()
 
 }
+
+
+//========================================================================
+
+
+
+function loadLocalStorage() {
+    var storedScores = JSON.parse(localStorage.getItem("userScoresArr"));
+
+    if (storedScores !== null) {
+        userScoresArr = storedScores;
+    }
+
+    loadUserScores();
+}
+
+
+
+function loadUserScores() {
+    list.innerHTML = "";
+
+    for (var i = 0; i < userScoresArr.length; i++) {
+        var userScore = userScoresArr[i];
+
+        var li = document.createElement("li");
+        li.textContent = userScore;
+        li.setAttribute("data-index", i);
+
+        list.appendChild(li);
+    }
+}
+
 
 
 
