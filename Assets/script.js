@@ -7,6 +7,7 @@ var body = document.body;
 //var to later create all necessary elements
 var btnElNav = document.createElement('button');
 var btnElStart = document.createElement('button');
+var btnElClear = document.createElement('button');
 var btnEl0 = document.createElement('button');
 var btnEl1 = document.createElement('button');
 var btnEl2 = document.createElement('button');
@@ -61,7 +62,7 @@ function homePage() {
     //add text content of h1
     h1.textContent = 'Think Fast!';
     // add text content of p element
-    pTag1.textContent = 'Welcome! This game will test your beginners coding knowledge. Every right answer will advance you to the next round. Every wrong answer will doc you 5 points on the score board. press Start to begin'
+    pTag1.textContent = 'Welcome! This game is rapid fire Q and A. Answer questions as quickly as possible to get the highest score. Be careful though, you will lose points for wrong answers! Have fun!'
 
 
     //start button
@@ -311,9 +312,9 @@ function scoresPage() {
     buttonBin.innerHTML = ''
     buttonStart.innerHTML = ''
     //add clear data box
-    buttonBin.appendChild(btnEl0).setAttribute('id', 'clear-local-data')
+    buttonBin.appendChild(btnElClear).setAttribute('id', 'clear-local-data')
     document.querySelector('#clear-local-data').textContent = 'Clear'
-    btnEl0.addEventListener('click', function () {
+    btnElClear.addEventListener('click', function () {
         localStorage.removeItem('userScoresArr')
     })
     loadLocalStorage()
