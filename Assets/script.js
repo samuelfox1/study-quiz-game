@@ -6,12 +6,12 @@ var body = document.body;
 
 //var to later create all necessary elements
 var btnElNav = document.createElement('button');
+var btnElStart = document.createElement('button');
+var btnEl0 = document.createElement('button');
 var btnEl1 = document.createElement('button');
 var btnEl2 = document.createElement('button');
 var btnEl3 = document.createElement('button');
-var btnEl4 = document.createElement('button');
-var textBox = document.createElement('input')
-var textInput = document.createElement('input')
+var liEl0 = document.createElement('li');
 
 
 // variable to focue on id tags h1
@@ -20,15 +20,22 @@ var h1 = document.querySelector('#h1')
 var pTag1 = document.querySelector('#pTag1')
 var pTag2 = document.querySelector('#pTag2')
 var buttonBin = document.querySelector('#button-bin')
+var buttonStart = document.querySelector('#button-start')
 var feedback = document.querySelector('#answer-feedback')
-var wrongBtn = document.querySelector('#wrong')
-var correctBtn = document.querySelector('#correct')
+var list = document.querySelector('#score-list')
 var footer = document.querySelector('#footer')
 
 
 //start game with 60 seconds on the clock
-var timeLeft = 9;
-var userInitials = ''
+var timeLeft = 500;
+var gameOver = false
+var userObj = {
+    name: '',
+    score: '',
+}
+var userScoresArr = []
+var x = 0
+
 
 
 
@@ -37,6 +44,12 @@ homePage()
 
 // HOME PAGE
 function homePage() {
+    //remove list elements form page
+    list.innerHTML = ''
+    //reset game status to loop again if desired
+    gameOver = false
+
+
     // add nav button and set id attributes
     nav.appendChild(btnElNav).setAttribute('id', 'navBtnTxt')
     //ad onclick function for scoresPage 
@@ -51,18 +64,21 @@ function homePage() {
     // add text content of p element
     pTag1.textContent = 'Game Rules go here'
 
-    //start button
-    //add to page and set attribute id
-    buttonBin.appendChild(btnEl1).setAttribute('id', 'start-button')
-    //set attribute onclick function to start game when button is clicked
-    btnEl1.setAttribute('onclick', 'gameCountdown()')
-    //set button text
-    startButtonText = document.querySelector('#start-button')
-    startButtonText.textContent = 'Start'
 
+    //start button
+    //add to page and set id tag
+    buttonStart.appendChild(btnElStart).setAttribute('id', 'start-button')
+    //set button text
+    document.querySelector('#start-button').textContent = 'Start'
+    //listen for button click
+    btnElStart.addEventListener('click', function () {
+        //start game countdown when clicked
+        console.log('start game')
+        gameCountdown()
+    })
     //homepage footer
-    footer.textContent = 'Samuel Fox, December 2020';
-    footer.style.textAlign = 'center';
+    // footer.textContent = 'Samuel Fox, December 2020';
+    // footer.style.textAlign = 'center';
 }
 
 
@@ -81,15 +97,17 @@ function gameCountdown() {
         timeTillStart--;
         h1.textContent = ''
         pTag1.textContent = 'Get Ready'
-        buttonBin.innerHTML = ''
+        buttonStart.innerHTML = ''
 
         //when coutdown finishes, clear content and start game
         if (timeTillStart === -1) {
             //nav bar text signal start
             navBtnTxt.textContent = 'Start!'
-
+            x = 0
+            console.log('x at game start =' + x)
             // clear button bin
             gameStart();
+            //stop countdown timer
             clearInterval(timeInterval);
         }
 
@@ -99,26 +117,22 @@ function gameCountdown() {
 
 
 
-//Start countdown timer
+//COUNTDOWN TO GAME START
 function gameStart() {
-    // launch question1 function
-    question1()
+    // launch questionArray[index-number] function
+    question(0)
     console.log('Game Started')
-
     var timeInterval = setInterval(function () {
 
         // add nav button and set id attributes
         nav.appendChild(btnElNav).setAttribute('id', 'navBtnTxt')
-
-        //display countdown text
+        //display countdown text in nav button spot
         navBtnTxt.textContent = timeLeft + ' seconds left!';
-        //subtract 1 second
+        //deccrement game clock
         timeLeft--;
 
         //when time is up, clear buttons and 
-        if (timeLeft < 0) {
-            //nav bar text alert
-            navBtnTxt.textContent = 'Times Up!'
+        if (timeLeft < 0 || gameOver === true) {
             //reset button-bin
             buttonBin.innerHTML = ''
             inputPlayerInfo();
@@ -130,49 +144,89 @@ function gameStart() {
 
 
 
+////===================
+var questionsArr = [{
+    title: 'question1',
+    question: 'ask question1 here',
+    choices: ['Q1A1', 'Q1A2', 'Q1A3', 'Q1A4',],
+    answer: 'Q1A4'
+}, {
+    title: 'question 2',
+    question: 'ask question2 here',
+    choices: ['Q2A1', 'Q2A2', 'Q2A3', 'Q2A4',],
+    answer: 'Q2A2'
+}, {
+    title: 'question 3',
+    question: 'ask question3 here',
+    choices: ['Q3A1', 'Q3A2', 'Q3A3', 'Q3A4',],
+    answer: 'Q3A1'
+}, {
+    title: 'question 4',
+    question: 'ask question4 here',
+    choices: ['Q4A1', 'Q4A2', 'Q4A3', 'Q4A4',],
+    answer: 'Q4A3'
+}, {
+    title: 'question 5',
+    question: 'ask question5 here',
+    choices: ['Q5A1', 'Q5A2', 'Q5A3', 'Q5A4',],
+    answer: 'Q5A3'
+}];
+
+//Button array used in for loop to create question & answer pages
+var buttonArr = [
+    btnEl0,
+    btnEl1,
+    btnEl2,
+    btnEl3,
+]
 
 
-// START GAME / question 1 layout of 'main content'
-function question1() {
-    //add text content of h1
-    h1.textContent = 'Question 1';
-    // add text content of p element
-    pTag1.textContent = 'ask question here'
-    //create button element in our button bin
+function question(x) {
 
-    //wrong button 1
-    //add button to page & add id attribute
-    buttonBin.appendChild(btnEl1).setAttribute('id', 'wrong-1')
-    //set attribute onclick function
-    btnEl1.setAttribute('onclick', 'wrong()')
-    //focus on attribute & set text content
-    document.querySelector('#wrong-1').textContent = 'wrong 1'
+    if (x < questionsArr.length) {
 
-    //wrong button 2
-    buttonBin.appendChild(btnEl2).setAttribute('id', 'wrong-2')
-    btnEl2.setAttribute('onclick', 'wrong()')
-    document.querySelector('#wrong-2').textContent = 'wrong 2'
-    //wrong button 3
-    buttonBin.appendChild(btnEl3).setAttribute('id', 'wrong-3')
-    btnEl3.setAttribute('onclick', 'wrong()')
-    document.querySelector('#wrong-3').textContent = 'wrong 3'
+        //add title Question[x]
+        h1.textContent = questionsArr[x].title;
+        // add question text here
+        pTag1.textContent = questionsArr[x].question;
 
-    //correct button
-    buttonBin.appendChild(btnEl4).setAttribute('id', 'correct')
-    btnEl4.setAttribute('onclick', 'correct()')
-    document.querySelector('#correct').textContent = 'correct'
+        //create answer buttons in our button bin
+        for (let i = 0; i < questionsArr[x].choices.length; i++) {
+            var text = questionsArr[x].choices[i]
+            //add button to page & add id attribute
+            buttonBin.appendChild(buttonArr[i]).setAttribute('id', questionsArr[x].choices[i])
+            //focus on attribute & set text content
+            document.querySelector(`#${questionsArr[x].choices[i]}`).textContent = text
+        }
+    } else {
+
+        gameOver = true
+    }
+
+    buttonBin.addEventListener('click', function (event) {
+        if (event.target.textContent === questionsArr[x].answer) {
+
+            correct()
+            x++
+            question(x)
+
+        } else {
+            tryAgain()
+        }
+    })
 
 }
 
 
+
 //onclick function for wrong answer
-function wrong() {
+function tryAgain() {
     //report wrong answer to user
     feedback.textContent = 'try again';
     //reduce game clock time for wrong answer clicks
     timeLeft = timeLeft - 5
     //set display time for wrong answer feedback
-    var feedbackTimer = 2;
+    var feedbackTimer = 1;
 
     var feedbackInterval = setInterval(function () {
         feedbackTimer--;
@@ -191,7 +245,7 @@ function correct() {
     //report correct anser to user
     feedback.textContent = 'correct!';
     //set display time for correct answer feedback
-    var feedbackTimer = 3;
+    var feedbackTimer = 2;
 
     var feedbackInterval = setInterval(function () {
         feedbackTimer--;
@@ -207,15 +261,24 @@ function correct() {
 
 
 function inputPlayerInfo() {
+
     h1.textContent = ''
     pTag1.textContent = ''
     buttonBin.innerHTML = ''
-    userInitials = prompt('Save that score! \n enter initials')
-    console.log(userInitials)
+    userObj.name = prompt('Save that score! \n enter initials')
+    userObj.score = timeLeft
+    userScoresArr.push(userObj)
+    console.log(userScoresArr)
+    // console.log('score = ' + timeLeft)
     scoresPage()
-    // buttonBin.appendChild(textBox).setAttribute('id', 'user-initials')
-    // buttonBin.appendChild(textInput).setAttribute('type', 'submit')
-    // textInput.setAttribute('onclick', 'recordUserInitials()')
+
+    for (let i = 0; i < userScoresArr.length + 1; i++) {
+        console.log(userScoresArr.length)
+        list.appendChild(liEl0).textContent = `${userScoresArr[0].name} - ${userScoresArr[0].score} `
+
+
+    }
+
 
 }
 
@@ -223,17 +286,23 @@ function inputPlayerInfo() {
 
 // SCORE PAGE
 function scoresPage() {
+
     //ad onclick function for scoresPage 
     btnElNav.setAttribute('onclick', 'homePage()')
     //set nav button attribute text
     navBtnTxt.textContent = "Home"
-    console.log('Scores')
 
     //h1 text
     h1.textContent = 'Scores'
-    // cleat pTag text
+    // clear pTag text
     pTag1.textContent = ""
     //clear button box
     buttonBin.innerHTML = ''
 
+
 }
+
+
+
+
+
