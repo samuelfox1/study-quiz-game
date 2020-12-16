@@ -9,12 +9,16 @@ body, nav{
 main {
     height: 100%;
     border: solid 1px;
-    /* align-items: center; */
+    align-items: center;
+    
 }
 
-.main-content {
-  /* margin: 0 auto; */
+#button-bin {
+  margin:1rem;
+  justify-content: space-between;
 }
+
+
 
 .footer, .push {
     height: 3rem;
@@ -37,5 +41,5 @@ body {
   background: #42A5F5;
   color: white;
   /* adjust height of footer*/
-  line-height: 50px;
+  line-height: 30px;
 }

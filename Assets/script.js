@@ -27,7 +27,7 @@ var footer = document.querySelector('#footer')
 
 
 //start game with 60 seconds on the clock
-var timeLeft = 500;
+var pointsLeft = 500;
 var gameOver = false
 var userObj = {
     name: '',
@@ -59,9 +59,9 @@ function homePage() {
 
 
     //add text content of h1
-    h1.textContent = 'Quiz Time';
+    h1.textContent = 'Think Fast!';
     // add text content of p element
-    pTag1.textContent = 'Game Rules go here'
+    pTag1.textContent = 'Welcome! This game will test your beginners coding knowledge. Every right answer will advance you to the next round. Every wrong answer will doc you 5 points on the score board. press Start to begin'
 
 
     //start button
@@ -101,7 +101,6 @@ function gameCountdown() {
         if (timeTillStart === -1) {
             //nav bar text signal start
             navBtnTxt.textContent = 'Start!'
-            x = 0
             // clear button bin
             gameStart();
             //stop countdown timer
@@ -124,12 +123,12 @@ function gameStart() {
         // add nav button and set id attributes
         nav.appendChild(btnElNav).setAttribute('id', 'navBtnTxt')
         //display countdown text in nav button spot
-        navBtnTxt.textContent = timeLeft + ' seconds left!';
+        navBtnTxt.textContent = pointsLeft + ' points left!';
         //deccrement game clock
-        timeLeft--;
+        pointsLeft--;
 
         //when time is up, clear buttons and 
-        if (timeLeft < 0 || gameOver === true) {
+        if (pointsLeft < 1 || gameOver === true) {
             //reset button-bin
             buttonBin.innerHTML = ''
             clearInterval(timeInterval);
@@ -144,29 +143,29 @@ function gameStart() {
 ////===================
 var questionsArr = [{
     title: 'question1',
-    question: 'ask question1 here',
-    choices: ['Q1A1', 'Q1A2', 'Q1A3', 'Q1A4',],
-    answer: 'Q1A4'
+    question: 'What does TLA stand for?',
+    choices: ['two-little-apples', 'twin-ladder-accessories', 'three-letter-acronym', 'twirling-laundry-appliance',],
+    answer: 'three-letter-acronym'
 }, {
     title: 'question 2',
-    question: 'ask question2 here',
-    choices: ['Q2A1', 'Q2A2', 'Q2A3', 'Q2A4',],
-    answer: 'Q2A2'
+    question: 'What does URL stand for?',
+    choices: ['urgent-red-light', 'unified-resource-link', 'unorganized-resource-list', 'up-real-late',],
+    answer: 'unified-resource-link'
 }, {
     title: 'question 3',
-    question: 'ask question3 here',
-    choices: ['Q3A1', 'Q3A2', 'Q3A3', 'Q3A4',],
-    answer: 'Q3A1'
+    question: 'What does RAM stand for',
+    choices: ['real-angry-man', 'random-accessory-monkey', 'random-access-memory', 'its-just-an-animal',],
+    answer: 'random-access-memory'
 }, {
     title: 'question 4',
-    question: 'ask question4 here',
-    choices: ['Q4A1', 'Q4A2', 'Q4A3', 'Q4A4',],
-    answer: 'Q4A3'
+    question: 'What about API?',
+    choices: ['alien-party-instrument', 'application-programming-interface', 'a-persons-intelligence', 'automotive-property-insurance',],
+    answer: 'application-programming-interface'
 }, {
     title: 'question 5',
-    question: 'ask question5 here',
-    choices: ['Q5A1', 'Q5A2', 'Q5A3', 'Q5A4',],
-    answer: 'Q5A3'
+    question: 'why are all of my answeres kebab case?',
+    choices: ['i-thought-it-would-be-funny', 'i-like-the-way-it-looks', 'what-is-kebab-case', 'they-have-to-be-because-i-designed-my-program-poorly'],
+    answer: 'they-have-to-be-because-i-designed-my-program-poorly'
 }];
 
 //Button array used in for loop to create question & answer pages
@@ -204,13 +203,23 @@ function question(x) {
 
     buttonBin.addEventListener('click', function (event) {
         if (event.target.textContent === questionsArr[x].answer) {
+            console.log(event.target.textContent)
+            console.log(questionsArr[x].answer)
+            console.log("correct")
 
-            correct()
+            // correct()
+
+            console.log('correct x = ' + x)
             x++
             question(x)
 
-        } else {
-            tryAgain()
+        }
+        else {
+            console.log('wrong')
+            console.log('wrong x = ' + x)
+            pointsLeft = pointsLeft - 5
+
+            // tryAgain()
         }
     })
 
@@ -218,44 +227,54 @@ function question(x) {
 
 
 
-//onclick function for wrong answer
-function tryAgain() {
-    //report wrong answer to user
-    feedback.textContent = 'try again';
-    //reduce game clock time for wrong answer clicks
-    timeLeft = timeLeft - 5
-    //set display time for wrong answer feedback
-    var feedbackTimer = 1;
-
-    var feedbackInterval = setInterval(function () {
-        feedbackTimer--;
-
-        if (feedbackTimer === 0) {
-            feedback.textContent = "";
-            clearInterval(feedbackInterval);
-        }
-
-    }, 1000);
-}
 
 
 //onclick function for correct answers
 function correct() {
     //report correct anser to user
-    feedback.textContent = 'correct!';
+    // feedback.textContent = ''
+    // feedback.textContent = 'correct!';
     //set display time for correct answer feedback
-    var feedbackTimer = 2;
+    var feedbackTimer = 1;
 
-    var feedbackInterval = setInterval(function () {
+    var feedbackIntervalCorrect = setInterval(function () {
         feedbackTimer--;
 
         if (feedbackTimer === 0) {
             feedback.textContent = "";
-            clearInterval(feedbackInterval);
+            clearInterval(feedbackIntervalCorrect);
         }
 
-    }, 1000);
+    }, 200);
 }
+
+
+
+
+
+
+//onclick function for wrong answer
+function tryAgain() {
+    //report wrong answer to user
+    // feedback.textContent = ''
+    // feedback.textContent = 'try again';
+    //reduce game clock time for wrong answer clicks
+    pointsLeft = pointsLeft - 5
+    //set display time for wrong answer feedback
+    var feedbackTimer = 1;
+
+    var feedbackIntervalTryAgain = setInterval(function () {
+        feedbackTimer--;
+
+        if (feedbackTimer === 0) {
+            feedback.textContent = "";
+            clearInterval(feedbackIntervalTryAgain);
+        }
+
+    }, 200);
+}
+
+
 
 
 var inputName = ''
@@ -268,7 +287,7 @@ function inputPlayerInfo() {
     pTag1.textContent = ''
     buttonBin.innerHTML = ''
     inputName = prompt('Save that score! \n enter initials')
-    userScoresArr.push(`${inputName} - ${timeLeft}`)
+    userScoresArr.push(`${inputName} - ${pointsLeft} points`)
     //may need to be array name\/ \/ update line 315 as well
     localStorage.setItem("userScoresArr", JSON.stringify(userScoresArr));
     scoresPage()
@@ -288,11 +307,15 @@ function scoresPage() {
     h1.textContent = 'Scores'
     // clear pTag text
     pTag1.textContent = ""
-    //clear button box
+    //clear button boxes
     buttonBin.innerHTML = ''
     buttonStart.innerHTML = ''
-    // loadScores()
-    // init()
+    //add clear data box
+    buttonBin.appendChild(btnEl0).setAttribute('id', 'clear-local-data')
+    document.querySelector('#clear-local-data').textContent = 'Clear'
+    btnEl0.addEventListener('click', function () {
+        localStorage.removeItem('userScoresArr')
+    })
     loadLocalStorage()
 
 }
@@ -327,6 +350,7 @@ function loadUserScores() {
         list.appendChild(li);
     }
 }
+
 
 
 
