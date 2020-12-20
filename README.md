@@ -1,5 +1,7 @@
 # study-quiz-game
 
+https://samuelfox1.github.io/study-quiz-game/
+
 Think Fast! is a unique quiz style game to test your knowledge against your friends. Make your way through the silly questions and race against the clock. Each correct answer will advance to the next question, while each incorrect answer will result in points taken away from the game clock / scoreboard.
 
 The assignment to develop this timed style game is to work on our javascript coding skills and practice the basic javascript language I have learned so far. 
