@@ -166,7 +166,7 @@ var questionsArr = [{
     title: 'question 5',
     question: 'why are all of my answeres kebab case?',
     choices: ['i-thought-it-would-be-funny', 'i-like-the-way-it-looks', 'what-is-kebab-case', 'they-have-to-be-because-i-designed-my-program-funky'],
-    answer: 'they-have-to-be-because-i-designed-my-program-poorly'
+    answer: 'they-have-to-be-because-i-designed-my-program-funky'
 }];
 
 //Button array used in for loop to create question & answer pages
